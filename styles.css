@@ -79,3 +79,53 @@ button:hover {
   border-radius: 8px;
   word-wrap: break-word;
 }
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #1e1e1e;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.pfp {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.pfp-small {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.profile-info input {
+  background: #1e1e1e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.profile-info button {
+  margin-top: 0.5rem;
+  padding: 8px;
+  background: #3a86ff;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
