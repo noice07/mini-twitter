@@ -25,22 +25,53 @@
 <footer>© 2025 FriendCircle</footer>
 
 <script>
-  document.getElementById('loginForm').addEventListener('submit', function(e) {
+  const username = sessionStorage.getItem('username');
+  if (!username) {
+    alert("Please log in first.");
+    window.location.href = "index.html";
+  }
+
+  // Profile info storage
+  let profilePic = localStorage.getItem('pfp') || 'https://via.placeholder.com/40';
+  let status = localStorage.getItem('status') || '';
+
+  document.getElementById("welcomeUser").textContent = `Hi, ${username} 👋`;
+  document.getElementById("pfp").src = profilePic;
+  document.getElementById("statusText").textContent = status;
+
+  // Post logic
+  document.getElementById("postForm").addEventListener("submit", function(e) {
     e.preventDefault();
-    const username = document.getElementById('username').value.trim();
-    const code = document.getElementById('circlecode').value.trim();
-    const validCode = "friends123";
+    const msg = document.getElementById("message").value.trim();
+    if (!msg) return;
 
-    if (code === validCode) {
-      sessionStorage.setItem('username', username);
-      console.log("Login successful for:", username);
+    const post = document.createElement("div");
+    post.className = "post";
+    post.innerHTML = `
+      <div class="post-header">
+        <img src="${profilePic}" class="pfp-small" />
+        <div>
+          <strong>${username}</strong><br/>
+          <span class="status">${status}</span>
+        </div>
+      </div>
+      <p>${msg}</p>
+    `;
 
-      window.location.href = 'feed.html';
-    } else {
-      alert("Invalid circle code.");
-    }
+    document.getElementById("feed").prepend(post);
+    document.getElementById("message").value = '';
+  });
+
+  // Save profile
+  document.getElementById("saveProfile").addEventListener("click", () => {
+    const newPic = document.getElementById("profilePic").value.trim();
+    const newStatus = document.getElementById("status").value.trim();
+    if (newPic) localStorage.setItem('pfp', newPic);
+    if (newStatus) localStorage.setItem('status', newStatus);
+    alert("Profile updated. Refresh to see changes.");
   });
 </script>
+
 
 </body>
 </html>
