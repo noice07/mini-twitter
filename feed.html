@@ -29,6 +29,13 @@
 </footer>
 
 <script>
+  <script>
+  // If no username or circle code in sessionStorage, redirect to login
+  if (!sessionStorage.getItem('username') || !sessionStorage.getItem('circleCode')) {
+    window.location.href = 'index.html';
+  }
+</script>
+
   const form = document.getElementById('postForm');
   const feed = document.getElementById('feed');
 
