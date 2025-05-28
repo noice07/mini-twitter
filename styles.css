@@ -1,40 +1,115 @@
-/* frontend/styles.css */
+/* Import Korean font */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
 body {
-  font-family: 'Comic Sans MS', cursive, sans-serif;
-  background: #fef8f5;
-  color: #333;
-  padding: 20px;
+  background: #f9f7f7; /* soft off-white */
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #3a3a3a;
+  margin: 0;
+  padding: 0;
+  background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60');
+  background-repeat: repeat;
+  background-size: 150px 150px;
 }
 
-.login-box, form {
-  max-width: 400px;
-  margin: auto;
-  background: #fff0f6;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+header {
+  background: #ffe4e1; /* pale pink */
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #7b2ff7;
+  text-shadow: 1px 1px 2px #fce4ec;
+  letter-spacing: 2px;
+  border-bottom: 2px solid #f4a261;
+  position: relative;
 }
 
-textarea {
-  width: 100%;
-  height: 80px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  padding: 10px;
+header img {
+  height: 50px;
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 button {
-  background: #ffb6c1;
+  background: #a8dadc; /* soft cyan */
   border: none;
-  padding: 10px 20px;
   border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  color: #1d3557;
+  font-weight: 700;
   cursor: pointer;
-  margin-top: 10px;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+button:hover {
+  background: #457b9d;
+  color: white;
+}
+
+input, textarea {
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1.5px solid #ccc;
+  width: 100%;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+  border-color: #f4a261;
+  outline: none;
+}
+
+.container {
+  max-width: 700px;
+  margin: 2rem auto;
+  background: #fff8f0;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .post {
-  background: #fff9fa;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 8px;
+  background: #fff8f0; /* light cream */
+  border-left: 5px solid #f4a261; /* warm orange */
+  margin: 1rem 0;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #4a4a4a;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  color: #7b2ff7;
+  letter-spacing: 1.5px;
+}
+
+a {
+  color: #a8dadc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #457b9d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+  header {
+    font-size: 1.5rem;
+  }
 }
