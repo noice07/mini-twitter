@@ -2,54 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FriendCircle Feed</title>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-<header>
-  FriendCircle
-</header>
+<header>FriendCircle</header>
 
 <main class="container">
+  <h2 id="welcomeUser"></h2>
+
   <form id="postForm">
-    <textarea id="message" placeholder="What's on your mind?"></textarea>
+    <textarea id="message" rows="3" placeholder="What's on your mind?"></textarea>
     <button type="submit">Post</button>
   </form>
 
-  <div id="feed" class="feed">
-    <!-- Posts will appear here -->
-  </div>
+  <div id="feed" class="feed"></div>
 </main>
 
-<footer>
-  FriendCircle © 2025
-</footer>
+<footer>© 2025 FriendCircle</footer>
 
 <script>
-  <script>
-  // If no username or circle code in sessionStorage, redirect to login
-  if (!sessionStorage.getItem('username') || !sessionStorage.getItem('circleCode')) {
-    window.location.href = 'index.html';
+  const username = sessionStorage.getItem('username');
+  if (!username) {
+    alert("Please log in first.");
+    window.location.href = "index.html";
+  } else {
+    document.getElementById("welcomeUser").textContent = "Hi, " + username + " 👋";
   }
-</script>
 
-  const form = document.getElementById('postForm');
-  const feed = document.getElementById('feed');
-
-  form.addEventListener('submit', (e) => {
+  document.getElementById("postForm").addEventListener("submit", function(e) {
     e.preventDefault();
-    const message = document.getElementById('message').value.trim();
-    if (!message) return;
+    const msg = document.getElementById("message").value.trim();
+    if (!msg) return;
 
-    const post = document.createElement('div');
-    post.className = 'post';
-    post.textContent = message;
-    feed.prepend(post);
+    const post = document.createElement("div");
+    post.className = "post";
+    post.textContent = msg;
+    document.getElementById("feed").prepend(post);
 
-    document.getElementById('message').value = '';
+    document.getElementById("message").value = "";
   });
 </script>
 
