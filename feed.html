@@ -5,32 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FriendCircle Feed</title>
   <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
 </head>
 <body>
 
 <header>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Hangeul.svg/80px-Hangeul.svg.png" alt="Korean Letters" />
   FriendCircle
 </header>
 
-<div class="container">
+<main class="container">
   <form id="postForm">
-    <label for="message">Write a thought</label>
-    <textarea id="message" rows="4" placeholder="What’s on your mind? 📖"></textarea>
-    <button type="submit">
-      <img src="https://cdn-icons-png.flaticon.com/512/29/29302.png" alt="Book Icon" />
-      Post
-    </button>
+    <textarea id="message" placeholder="What's on your mind?"></textarea>
+    <button type="submit">Post</button>
   </form>
 
   <div id="feed" class="feed">
     <!-- Posts will appear here -->
   </div>
-</div>
+</main>
 
 <footer>
-  <img src="https://cdn-icons-png.flaticon.com/512/29/29302.png" alt="Book Icon" />
   FriendCircle © 2025
 </footer>
 
@@ -38,10 +32,10 @@
   const form = document.getElementById('postForm');
   const feed = document.getElementById('feed');
 
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const message = document.getElementById('message').value;
-    if (!message.trim()) return;
+    const message = document.getElementById('message').value.trim();
+    if (!message) return;
 
     const post = document.createElement('div');
     post.className = 'post';
@@ -49,9 +43,6 @@
     feed.prepend(post);
 
     document.getElementById('message').value = '';
-
-    // Optional: Add backend fetch call here
-    // await fetch('/api/post', { method: 'POST', body: JSON.stringify({ message }) });
   });
 </script>
 
