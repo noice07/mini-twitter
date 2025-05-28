@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>FriendCircle Feed</title>
   <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -33,31 +32,6 @@
 
 <footer>© 2025 FriendCircle</footer>
 
-<script>
-  const username = sessionStorage.getItem('username');
-  if (!username) {
-    alert("Please log in first.");
-    window.location.href = "index.html";
-  }
-
-  let profilePic = localStorage.getItem('pfp') || 'https://via.placeholder.com/40';
-  let status = localStorage.getItem('status') || '';
-
-  document.getElementById("welcomeUser").textContent = `Hi, ${username} 👋`;
-  document.getElementById("pfp").src = profilePic;
-  document.getElementById("statusText").textContent = status;
-
-  document.getElementById("saveProfile").addEventListener("click", () => {
-    const newPic = document.getElementById("profilePic").value.trim();
-    const newStatus = document.getElementById("status").value.trim();
-    if (newPic) {
-      profilePic = newPic;
-      localStorage.setItem('pfp', newPic);
-      document.getElementById("pfp").src = newPic;
-    }
-    if (newStatus) {
-      status = newStatus;
-      localStorage.setItem('status', newStatus);
-      document.getElementById("statusText").textContent = newStatus;
-    }
-    alert("Profi
+<script src="script.js"></script>
+</body>
+</html>
