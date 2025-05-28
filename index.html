@@ -1,60 +1,41 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FriendCircle Login</title>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-<header>
-  FriendCircle
-</header>
+<header>FriendCircle</header>
 
 <main class="container">
-  <form>
+  <form id="loginForm">
     <label for="username">Username</label>
-    <input id="username" type="text" placeholder="Enter your username" />
+    <input id="username" type="text" placeholder="Enter username" required />
 
     <label for="circlecode">Circle Code</label>
-    <input id="circlecode" type="text" placeholder="Enter your circle code" />
+    <input id="circlecode" type="text" placeholder="Enter circle code" required />
 
     <button type="submit">Login</button>
   </form>
 </main>
 
-<footer>
-  FriendCircle © 2025
-</footer>
+<footer>© 2025 FriendCircle</footer>
+
 <script>
-  const form = document.querySelector('form');
-  form.addEventListener('submit', (e) => {
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const username = document.getElementById('username').value.trim();
-    const circleCode = document.getElementById('circlecode').value.trim();
+    const code = document.getElementById('circlecode').value.trim();
+    const validCode = "friends123";
 
-    // Simple check: circle code must be "friends123" (example)
-    if(username && circleCode === "friends123") 
-        if (username === "") {
-      alert("Please enter your username.");
-      return;
-    }
-
-    if (circleCode !== validCircleCode) {
-      alert("Invalid circle code.");
-      return;
-    }
-{
-      // Save username & circle in localStorage or sessionStorage
+    if (code === validCode) {
       sessionStorage.setItem('username', username);
-      sessionStorage.setItem('circleCode', circleCode);
-      // Redirect to feed page
       window.location.href = 'feed.html';
     } else {
-      alert('Invalid username or circle code.');
+      alert("Invalid circle code.");
     }
   });
 </script>
