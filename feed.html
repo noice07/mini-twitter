@@ -1,0 +1,54 @@
+<!-- frontend/feed.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FriendCircle Feed</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h2>🌟 FriendCircle</h2>
+    <span id="userTag"></span>
+  </header>
+  <main>
+    <form id="postForm">
+      <textarea id="thought" placeholder="What's on your mind?"></textarea>
+      <button type="submit">Post</button>
+    </form>
+    <section id="feed"></section>
+  </main>
+
+  <script>
+    const username = localStorage.getItem('username');
+    const circlecode = localStorage.getItem('circlecode');
+    document.getElementById('userTag').innerText = `@${username}`;
+
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const res = await fetch('http://localhost:3000/api/post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, circlecode, content: document.getElementById('thought').value })
+      });
+      document.getElementById('thought').value = '';
+      loadFeed();
+    });
+
+    async function loadFeed() {
+      const res = await fetch(`http://localhost:3000/api/feed/${circlecode}`);
+      const posts = await res.json();
+      const feed = document.getElementById('feed');
+      feed.innerHTML = '';
+      posts.reverse().forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'post';
+        div.innerHTML = `<strong>@${p.username}</strong>: ${p.content}`;
+        feed.appendChild(div);
+      });
+    }
+
+    loadFeed();
+  </script>
+</body>
+</html>
