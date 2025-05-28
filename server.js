@@ -4,7 +4,6 @@ const cors = require('cors');
 const fs = require('fs');
 const app = express();
 const PORT = 3000;
-const validCircleCodes = ["abc123", "friends2025"];
 
 app.use(cors());
 app.use(express.json());
