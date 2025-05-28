@@ -1,28 +1,37 @@
-<!-- frontend/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FriendCircle</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FriendCircle Login</title>
+<link rel="stylesheet" href="styles.css" />
+<!-- Korean font -->
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet" />
 </head>
-<body class="login-page">
-  <div class="login-box">
-    <h1>Welcome to FriendCircle 💬</h1>
-    <input type="text" id="username" placeholder="Your Name" />
-    <input type="text" id="circlecode" placeholder="Circle Code" />
-    <button onclick="login()">Join</button>
-  </div>
+<body>
 
-  <script>
-    function login() {
-      const username = document.getElementById('username').value;
-      const code = document.getElementById('circlecode').value;
-      localStorage.setItem('username', username);
-      localStorage.setItem('circlecode', code);
-      window.location.href = "feed.html";
-    }
-  </script>
+<header>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Hangeul.svg/80px-Hangeul.svg.png" alt="Korean Letters" />
+  FriendCircle
+</header>
+
+<form>
+  <label for="username">Username</label>
+  <input id="username" type="text" placeholder="Enter your username" />
+
+  <label for="circlecode">Circle Code</label>
+  <input id="circlecode" type="text" placeholder="Enter your circle code" />
+
+  <button type="submit">
+    <img src="https://cdn-icons-png.flaticon.com/512/29/29302.png" alt="Book Icon" />
+    Login
+  </button>
+</form>
+
+<footer>
+  <img src="https://cdn-icons-png.flaticon.com/512/29/29302.png" alt="Book Icon" />
+  FriendCircle © 2025
+</footer>
+
 </body>
 </html>
