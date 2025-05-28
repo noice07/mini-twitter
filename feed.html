@@ -12,16 +12,16 @@
 
 <main class="container">
   <h2 id="welcomeUser"></h2>
-  <div class="profile-section">
-  <img id="pfp" src="https://via.placeholder.com/40" class="pfp" />
-  <div class="profile-info">
-    <div id="statusText"></div>
-    <input id="profilePic" type="text" placeholder="Profile picture URL" />
-    <input id="status" type="text" placeholder="Write your status..." />
-    <button id="saveProfile">Save Profile</button>
-  </div>
-</div>
 
+  <div class="profile-section">
+    <img id="pfp" src="https://via.placeholder.com/40" class="pfp" />
+    <div class="profile-info">
+      <input id="profilePic" type="text" placeholder="Profile picture URL" />
+      <input id="status" type="text" placeholder="Write your status..." />
+      <button id="saveProfile">Save Profile</button>
+      <div id="statusText" class="status-display"></div>
+    </div>
+  </div>
 
   <form id="postForm">
     <textarea id="message" rows="3" placeholder="What's on your mind?"></textarea>
@@ -38,23 +38,26 @@
   if (!username) {
     alert("Please log in first.");
     window.location.href = "index.html";
-  } else {
-    document.getElementById("welcomeUser").textContent = "Hi, " + username + " 👋";
   }
 
-  document.getElementById("postForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const msg = document.getElementById("message").value.trim();
-    if (!msg) return;
+  let profilePic = localStorage.getItem('pfp') || 'https://via.placeholder.com/40';
+  let status = localStorage.getItem('status') || '';
 
-    const post = document.createElement("div");
-    post.className = "post";
-    post.textContent = msg;
-    document.getElementById("feed").prepend(post);
+  document.getElementById("welcomeUser").textContent = `Hi, ${username} 👋`;
+  document.getElementById("pfp").src = profilePic;
+  document.getElementById("statusText").textContent = status;
 
-    document.getElementById("message").value = "";
-  });
-</script>
-
-</body>
-</html>
+  document.getElementById("saveProfile").addEventListener("click", () => {
+    const newPic = document.getElementById("profilePic").value.trim();
+    const newStatus = document.getElementById("status").value.trim();
+    if (newPic) {
+      profilePic = newPic;
+      localStorage.setItem('pfp', newPic);
+      document.getElementById("pfp").src = newPic;
+    }
+    if (newStatus) {
+      status = newStatus;
+      localStorage.setItem('status', newStatus);
+      document.getElementById("statusText").textContent = newStatus;
+    }
+    alert("Profi
