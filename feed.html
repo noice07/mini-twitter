@@ -12,18 +12,8 @@
 <main class="container">
   <h2 id="welcomeUser"></h2>
 
-  <div class="profile-section">
-    <img id="pfp" src="https://via.placeholder.com/40" class="pfp" />
-    <div class="profile-info">
-      <input id="profilePic" type="text" placeholder="Profile picture URL" />
-      <input id="status" type="text" placeholder="Write your status..." />
-      <button id="saveProfile">Save Profile</button>
-      <div id="statusText" class="status-display"></div>
-    </div>
-  </div>
-
   <form id="postForm">
-    <textarea id="message" rows="3" placeholder="What's on your mind?"></textarea>
+    <textarea id="message" placeholder="What's on your mind?"></textarea>
     <button type="submit">Post</button>
   </form>
 
@@ -32,6 +22,71 @@
 
 <footer>© 2025 FriendCircle</footer>
 
-<script src="script.js"></script>
+<script>
+  const username = sessionStorage.getItem('username');
+  if (!username) {
+    alert("Please log in first.");
+    window.location.href = "index.html";
+  }
+
+  document.getElementById("welcomeUser").textContent = `Hi, ${username} 👋`;
+
+  document.getElementById("postForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const msg = document.getElementById("message").value.trim();
+    if (!msg) return;
+
+    const post = document.createElement("div");
+    post.className = "post";
+    post.innerHTML = `
+      <div class="post-header">
+        <strong>${username}</strong>
+        <button class="delete-btn">🗑️</button>
+      </div>
+      <p>${msg}</p>
+      <div class="actions">
+        <button class="like-btn">❤️ Like</button>
+        <span class="like-count">0</span>
+      </div>
+      <div class="comments">
+        <input class="comment-input" placeholder="Write a comment..." />
+        <button class="add-comment">Reply</button>
+        <div class="comment-list"></div>
+      </div>
+    `;
+
+    // Like button
+    const likeBtn = post.querySelector(".like-btn");
+    const likeCount = post.querySelector(".like-count");
+    let likes = 0;
+    likeBtn.addEventListener("click", () => {
+      likes++;
+      likeCount.textContent = likes;
+    });
+
+    // Delete button
+    post.querySelector(".delete-btn").addEventListener("click", () => {
+      post.remove();
+    });
+
+    // Comments
+    const commentInput = post.querySelector(".comment-input");
+    const commentList = post.querySelector(".comment-list");
+    post.querySelector(".add-comment").addEventListener("click", () => {
+      const comment = commentInput.value.trim();
+      if (comment) {
+        const c = document.createElement("p");
+        c.className = "comment";
+        c.textContent = `${username}: ${comment}`;
+        commentList.appendChild(c);
+        commentInput.value = "";
+      }
+    });
+
+    document.getElementById("feed").prepend(post);
+    document.getElementById("message").value = "";
+  });
+</script>
+
 </body>
 </html>
