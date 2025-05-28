@@ -33,6 +33,8 @@
 
     if (code === validCode) {
       sessionStorage.setItem('username', username);
+      console.log("Login successful for:", username);
+
       window.location.href = 'feed.html';
     } else {
       alert("Invalid circle code.");
