@@ -1,59 +1,59 @@
-<!-- frontend/feed.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FriendCircle Feed</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <header>
-    <h2>🌟 FriendCircle</h2>
-    <span id="userTag"></span>
-    <header>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Hangeul.svg/120px-Hangeul.svg.png" alt="Korean letters" />
+
+<header>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Hangeul.svg/80px-Hangeul.svg.png" alt="Korean Letters" />
   FriendCircle
 </header>
 
-  </header>
-  <main>
-    <form id="postForm">
-      <textarea id="thought" placeholder="What's on your mind?"></textarea>
-      <button type="submit">Post</button>
-    </form>
-    <section id="feed"></section>
-  </main>
+<div class="container">
+  <form id="postForm">
+    <label for="message">Write a thought</label>
+    <textarea id="message" rows="4" placeholder="What’s on your mind? 📖"></textarea>
+    <button type="submit">
+      <img src="https://cdn-icons-png.flaticon.com/512/29/29302.png" alt="Book Icon" />
+      Post
+    </button>
+  </form>
 
-  <script>
-    const username = localStorage.getItem('username');
-    const circlecode = localStorage.getItem('circlecode');
-    document.getElementById('userTag').innerText = `@${username}`;
+  <div id="feed" class="feed">
+    <!-- Posts will appear here -->
+  </div>
+</div>
 
-    document.getElementById('postForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const res = await fetch('http://localhost:3000/api/post', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, circlecode, content: document.getElementById('thought').value })
-      });
-      document.getElementById('thought').value = '';
-      loadFeed();
-    });
+<footer>
+  <img src="https://cdn-icons-png.flaticon.com/512/29/29302.png" alt="Book Icon" />
+  FriendCircle © 2025
+</footer>
 
-    async function loadFeed() {
-      const res = await fetch(`http://localhost:3000/api/feed/${circlecode}`);
-      const posts = await res.json();
-      const feed = document.getElementById('feed');
-      feed.innerHTML = '';
-      posts.reverse().forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'post';
-        div.innerHTML = `<strong>@${p.username}</strong>: ${p.content}`;
-        feed.appendChild(div);
-      });
-    }
+<script>
+  const form = document.getElementById('postForm');
+  const feed = document.getElementById('feed');
 
-    loadFeed();
-  </script>
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const message = document.getElementById('message').value;
+    if (!message.trim()) return;
+
+    const post = document.createElement('div');
+    post.className = 'post';
+    post.textContent = message;
+    feed.prepend(post);
+
+    document.getElementById('message').value = '';
+
+    // Optional: Add backend fetch call here
+    // await fetch('/api/post', { method: 'POST', body: JSON.stringify({ message }) });
+  });
+</script>
+
 </body>
 </html>
