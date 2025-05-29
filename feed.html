@@ -2,123 +2,136 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>FriendCircle Feed</title>
+  <title>Feed – FriendCircle</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header>FriendCircle</header>
+  <main class="container">
+    <h2 id="welcomeUser"></h2>
 
-<header>FriendCircle</header>
+    <!-- Profile Editor -->
+    <section class="profile-edit">
+      <input id="pfpInput" type="url" placeholder="Update Profile Picture" />
+      <input id="statusInput" type="text" placeholder="Update Status" />
+      <button id="updateProfileBtn">Update Profile</button>
+    </section>
 
-<main class="container">
-  <h2 id="welcomeUser"></h2>
+    <!-- Post Form -->
+    <form id="postForm">
+      <textarea id="message" placeholder="What's happening?"></textarea>
+      <button type="submit">Post</button>
+    </form>
 
-  <form id="postForm">
-    <textarea id="message" placeholder="What's on your mind?"></textarea>
-    <button type="submit">Post</button>
-  </form>
+    <!-- Feed -->
+    <div id="feed" class="feed"></div>
+  </main>
+  <footer>© 2025 FriendCircle</footer>
 
-  <div id="feed" class="feed"></div>
-</main>
+  <script>
+    const username = sessionStorage.getItem("username");
+    if (!username) {
+      alert("Login first.");
+      window.location.href = "index.html";
+    }
 
-<footer>© 2025 FriendCircle</footer>
+    document.getElementById("welcomeUser").textContent = `Welcome, @${username}`;
 
-<script>
-  const username = sessionStorage.getItem('username');
-  if (!username) {
-    alert("Please log in first.");
-    window.location.href = "index.html";
-  }
+    const profiles = JSON.parse(localStorage.getItem("profiles") || "{}");
+    const posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-  document.getElementById("welcomeUser").textContent = `Hi, ${username} 👋`;
+    const savePosts = () => localStorage.setItem("posts", JSON.stringify(posts));
+    const saveProfiles = () => localStorage.setItem("profiles", JSON.stringify(profiles));
 
-  const loadPosts = () => JSON.parse(localStorage.getItem("posts") || "[]");
-  const savePosts = (posts) => localStorage.setItem("posts", JSON.stringify(posts));
+    const renderPosts = () => {
+      const feed = document.getElementById("feed");
+      feed.innerHTML = "";
 
-  const profiles = JSON.parse(localStorage.getItem("profiles") || "{}");
-  const feed = document.getElementById("feed");
+      [...posts].reverse().forEach((post, index) => {
+        const profile = profiles[post.author] || {};
+        const avatar = profile.pfp?.startsWith("http") ? profile.pfp : "https://via.placeholder.com/40";
+        const status = profile.status || "";
 
-  function renderPosts() {
-    feed.innerHTML = "";
-    const posts = loadPosts();
-    posts.reverse().forEach((post, index) => {
-      const authorProfile = profiles[post.author] || {};
-      const avatar = authorProfile.pfp || "https://via.placeholder.com/40";
-      const status = authorProfile.status || "";
-
-      const postEl = document.createElement("div");
-      postEl.className = "post";
-      postEl.innerHTML = `
-        <div class="post-header">
-          <img src="${avatar}" alt="${post.author}" class="avatar" />
-          <div class="user-info">
-            <strong>${post.author}</strong><br/>
-            <small>${status}</small>
+        const postEl = document.createElement("div");
+        postEl.className = "post";
+        postEl.innerHTML = `
+          <div class="post-header">
+            <img src="${avatar}" class="avatar" alt="pfp" />
+            <div class="user-meta">
+              <strong>@${post.author}</strong>
+              <small>${status}</small>
+            </div>
+            ${post.author === username ? `<button class="delete-btn">🗑️</button>` : ""}
           </div>
-          ${post.author === username ? '<button class="delete-btn">🗑️</button>' : ""}
-        </div>
-        <p>${post.message}</p>
-        <div class="actions">
-          <button class="like-btn">❤️ Like</button>
-          <span class="like-count">${post.likes || 0}</span>
-        </div>
-        <div class="comments">
-          <input class="comment-input" placeholder="Write a comment..." />
-          <button class="add-comment">Reply</button>
-          <div class="comment-list">
-            ${(post.comments || []).map(c => `<p class="comment"><strong>${c.user}:</strong> ${c.text}</p>`).join('')}
+          <p>${post.message}</p>
+          <div class="actions">
+            <button class="like-btn">❤️</button>
+            <span>${post.likes || 0}</span>
           </div>
-        </div>
-      `;
+          <div class="comments">
+            <input class="comment-input" placeholder="Reply..." />
+            <button class="add-comment">Reply</button>
+            <div class="comment-list">
+              ${(post.comments || []).map(c => `<p><strong>@${c.user}</strong>: ${c.text}</p>`).join("")}
+            </div>
+          </div>
+        `;
 
-      const likeBtn = postEl.querySelector(".like-btn");
-      const likeCount = postEl.querySelector(".like-count");
-      likeBtn.addEventListener("click", () => {
-        const allPosts = loadPosts();
-        allPosts[allPosts.length - 1 - index].likes = (allPosts[allPosts.length - 1 - index].likes || 0) + 1;
-        savePosts(allPosts);
-        renderPosts();
-      });
-
-      if (post.author === username) {
-        postEl.querySelector(".delete-btn").addEventListener("click", () => {
-          const allPosts = loadPosts();
-          allPosts.splice(allPosts.length - 1 - index, 1);
-          savePosts(allPosts);
+        postEl.querySelector(".like-btn").onclick = () => {
+          post.likes = (post.likes || 0) + 1;
+          savePosts();
           renderPosts();
-        });
-      }
+        };
 
-      const commentInput = postEl.querySelector(".comment-input");
-      postEl.querySelector(".add-comment").addEventListener("click", () => {
-        const comment = commentInput.value.trim();
-        if (comment) {
-          const allPosts = loadPosts();
-          const targetPost = allPosts[allPosts.length - 1 - index];
-          targetPost.comments = targetPost.comments || [];
-          targetPost.comments.push({ user: username, text: comment });
-          savePosts(allPosts);
-          renderPosts();
+        if (post.author === username) {
+          postEl.querySelector(".delete-btn").onclick = () => {
+            posts.splice(posts.length - 1 - index, 1);
+            savePosts();
+            renderPosts();
+          };
         }
+
+        postEl.querySelector(".add-comment").onclick = () => {
+          const input = postEl.querySelector(".comment-input");
+          const text = input.value.trim();
+          if (text) {
+            post.comments = post.comments || [];
+            post.comments.push({ user: username, text });
+            savePosts();
+            renderPosts();
+          }
+        };
+
+        document.getElementById("feed").appendChild(postEl);
       });
+    };
 
-      feed.appendChild(postEl);
+    document.getElementById("postForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const message = document.getElementById("message").value.trim();
+      if (!message) return;
+      posts.push({ author: username, message, likes: 0, comments: [] });
+      savePosts();
+      document.getElementById("message").value = "";
+      renderPosts();
     });
-  }
 
-  document.getElementById("postForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const message = document.getElementById("message").value.trim();
-    if (!message) return;
+    // Profile Update
+    document.getElementById("updateProfileBtn").onclick = () => {
+      profiles[username] = {
+        pfp: document.getElementById("pfpInput").value.trim(),
+        status: document.getElementById("statusInput").value.trim()
+      };
+      saveProfiles();
+      alert("Profile updated.");
+      renderPosts();
+    };
 
-    const posts = loadPosts();
-    posts.push({ author: username, message, comments: [], likes: 0 });
-    savePosts(posts);
-    document.getElementById("message").value = "";
+    // Fill profile form on load
+    document.getElementById("pfpInput").value = profiles[username]?.pfp || "";
+    document.getElementById("statusInput").value = profiles[username]?.status || "";
+
     renderPosts();
-  });
-
-  renderPosts();
-</script>
-
+  </script>
 </body>
 </html>
