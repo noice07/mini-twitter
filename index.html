@@ -2,54 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>FriendCircle Login</title>
+  <title>Login – FriendCircle</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header>FriendCircle</header>
+  <main class="container">
+    <form id="loginForm">
+      <h2>Welcome back 👋</h2>
+      <input id="username" type="text" placeholder="Username" required />
+      <input id="circlecode" type="text" placeholder="Circle Code" required />
+      <input id="pfp" type="url" placeholder="Profile Picture URL" />
+      <input id="status" type="text" placeholder="Status (e.g., Vibing 😎)" />
+      <button type="submit">Enter</button>
+    </form>
+  </main>
+  <footer>© 2025 FriendCircle</footer>
 
-<header>FriendCircle</header>
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const code = document.getElementById("circlecode").value.trim();
+      const pfp = document.getElementById("pfp").value.trim();
+      const status = document.getElementById("status").value.trim();
 
-<main class="container">
-  <form id="loginForm">
-    <label for="username">Username</label>
-    <input id="username" type="text" placeholder="Enter username" required />
+      if (code !== "friends123") {
+        alert("Invalid circle code.");
+        return;
+      }
 
-    <label for="circlecode">Circle Code</label>
-    <input id="circlecode" type="text" placeholder="Enter circle code" required />
+      sessionStorage.setItem("username", username);
 
-    <label for="pfp">Profile Picture URL (optional)</label>
-    <input id="pfp" type="url" placeholder="https://..." />
-
-    <label for="status">Status (optional)</label>
-    <input id="status" type="text" placeholder="e.g., Chilling 😎" />
-
-    <button type="submit">Login</button>
-  </form>
-</main>
-
-<footer>© 2025 FriendCircle</footer>
-
-<script>
-  document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const username = document.getElementById('username').value.trim();
-    const code = document.getElementById('circlecode').value.trim();
-    const pfp = document.getElementById('pfp').value.trim();
-    const status = document.getElementById('status').value.trim();
-
-    if (code === "friends123") {
-      sessionStorage.setItem('username', username);
-
-      const profiles = JSON.parse(localStorage.getItem('profiles') || '{}');
+      const profiles = JSON.parse(localStorage.getItem("profiles") || "{}");
       profiles[username] = { pfp, status };
-      localStorage.setItem('profiles', JSON.stringify(profiles));
+      localStorage.setItem("profiles", JSON.stringify(profiles));
 
-      window.location.href = 'feed.html';
-    } else {
-      alert("Invalid circle code.");
-    }
-  });
-</script>
-
+      window.location.href = "feed.html";
+    });
+  </script>
 </body>
 </html>
