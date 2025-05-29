@@ -9,11 +9,11 @@
   <header>FriendCircle</header>
   <main class="container">
     <form id="loginForm">
-      <h2>Welcome back 👋</h2>
+      <h2>Join Your Circle</h2>
       <input id="username" type="text" placeholder="Username" required />
       <input id="circlecode" type="text" placeholder="Circle Code" required />
-      <input id="pfp" type="url" placeholder="Profile Picture URL" />
-      <input id="status" type="text" placeholder="Status (e.g., Vibing 😎)" />
+      <input id="pfp" type="file" accept="image/*" />
+      <textarea id="status" placeholder="What's on your mind?" rows="3"></textarea>
       <button type="submit">Enter</button>
     </form>
   </main>
@@ -24,20 +24,21 @@
       e.preventDefault();
       const username = document.getElementById("username").value.trim();
       const code = document.getElementById("circlecode").value.trim();
-      const pfp = document.getElementById("pfp").value.trim();
       const status = document.getElementById("status").value.trim();
+      const pfpInput = document.getElementById("pfp");
 
       if (code !== "friends123") {
         alert("Invalid circle code.");
         return;
       }
 
-      sessionStorage.setItem("username", username);
+      const pfp = pfpInput.files[0] ? URL.createObjectURL(pfpInput.files[0]) : "https://via.placeholder.com/150";
 
       const profiles = JSON.parse(localStorage.getItem("profiles") || "{}");
       profiles[username] = { pfp, status };
       localStorage.setItem("profiles", JSON.stringify(profiles));
 
+      sessionStorage.setItem("username", username);
       window.location.href = "feed.html";
     });
   </script>
