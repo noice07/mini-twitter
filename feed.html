@@ -10,20 +10,11 @@
   <main class="container">
     <h2 id="welcomeUser"></h2>
 
-    <!-- Profile Editor -->
-    <section class="profile-edit">
-      <input id="pfpInput" type="url" placeholder="Update Profile Picture" />
-      <input id="statusInput" type="text" placeholder="Update Status" />
-      <button id="updateProfileBtn">Update Profile</button>
-    </section>
-
-    <!-- Post Form -->
     <form id="postForm">
-      <textarea id="message" placeholder="What's happening?"></textarea>
+      <textarea id="message" placeholder="What's happening?" rows="3"></textarea>
       <button type="submit">Post</button>
     </form>
 
-    <!-- Feed -->
     <div id="feed" class="feed"></div>
   </main>
   <footer>© 2025 FriendCircle</footer>
@@ -49,7 +40,7 @@
 
       [...posts].reverse().forEach((post, index) => {
         const profile = profiles[post.author] || {};
-        const avatar = profile.pfp?.startsWith("http") ? profile.pfp : "https://via.placeholder.com/40";
+        const avatar = profile.pfp || "https://via.placeholder.com/40";
         const status = profile.status || "";
 
         const postEl = document.createElement("div");
@@ -115,21 +106,6 @@
       document.getElementById("message").value = "";
       renderPosts();
     });
-
-    // Profile Update
-    document.getElementById("updateProfileBtn").onclick = () => {
-      profiles[username] = {
-        pfp: document.getElementById("pfpInput").value.trim(),
-        status: document.getElementById("statusInput").value.trim()
-      };
-      saveProfiles();
-      alert("Profile updated.");
-      renderPosts();
-    };
-
-    // Fill profile form on load
-    document.getElementById("pfpInput").value = profiles[username]?.pfp || "";
-    document.getElementById("statusInput").value = profiles[username]?.status || "";
 
     renderPosts();
   </script>
