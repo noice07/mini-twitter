@@ -31,62 +31,88 @@
 
   document.getElementById("welcomeUser").textContent = `Hi, ${username} 👋`;
 
+  // Utility: Load/Save posts to localStorage
+  const loadPosts = () => JSON.parse(localStorage.getItem("posts") || "[]");
+  const savePosts = (posts) => localStorage.setItem("posts", JSON.stringify(posts));
+
+  const feed = document.getElementById("feed");
+
+  function renderPosts() {
+    feed.innerHTML = "";
+    const posts = loadPosts();
+    posts.reverse().forEach((post, index) => {
+      const postEl = document.createElement("div");
+      postEl.className = "post";
+      postEl.innerHTML = `
+        <div class="post-header">
+          <strong>${post.author}</strong>
+          ${post.author === username ? '<button class="delete-btn">🗑️</button>' : ""}
+        </div>
+        <p>${post.message}</p>
+        <div class="actions">
+          <button class="like-btn">❤️ Like</button>
+          <span class="like-count">${post.likes || 0}</span>
+        </div>
+        <div class="comments">
+          <input class="comment-input" placeholder="Write a comment..." />
+          <button class="add-comment">Reply</button>
+          <div class="comment-list">
+            ${(post.comments || []).map(c => `<p class="comment"><strong>${c.user}:</strong> ${c.text}</p>`).join('')}
+          </div>
+        </div>
+      `;
+
+      // Like logic
+      const likeBtn = postEl.querySelector(".like-btn");
+      const likeCount = postEl.querySelector(".like-count");
+      likeBtn.addEventListener("click", () => {
+        posts[posts.length - 1 - index].likes = (posts[posts.length - 1 - index].likes || 0) + 1;
+        savePosts(posts);
+        renderPosts();
+      });
+
+      // Delete logic
+      if (post.author === username) {
+        postEl.querySelector(".delete-btn").addEventListener("click", () => {
+          posts.splice(posts.length - 1 - index, 1);
+          savePosts(posts);
+          renderPosts();
+        });
+      }
+
+      // Comment logic
+      const commentInput = postEl.querySelector(".comment-input");
+      const commentList = postEl.querySelector(".comment-list");
+      postEl.querySelector(".add-comment").addEventListener("click", () => {
+        const comment = commentInput.value.trim();
+        if (comment) {
+          const newComment = { user: username, text: comment };
+          posts[posts.length - 1 - index].comments = posts[posts.length - 1 - index].comments || [];
+          posts[posts.length - 1 - index].comments.push(newComment);
+          savePosts(posts);
+          renderPosts();
+        }
+      });
+
+      feed.appendChild(postEl);
+    });
+  }
+
   document.getElementById("postForm").addEventListener("submit", function(e) {
     e.preventDefault();
-    const msg = document.getElementById("message").value.trim();
-    if (!msg) return;
-
-    const post = document.createElement("div");
-    post.className = "post";
-    post.innerHTML = `
-      <div class="post-header">
-        <strong>${username}</strong>
-        <button class="delete-btn">🗑️</button>
-      </div>
-      <p>${msg}</p>
-      <div class="actions">
-        <button class="like-btn">❤️ Like</button>
-        <span class="like-count">0</span>
-      </div>
-      <div class="comments">
-        <input class="comment-input" placeholder="Write a comment..." />
-        <button class="add-comment">Reply</button>
-        <div class="comment-list"></div>
-      </div>
-    `;
-
-    // Like button
-    const likeBtn = post.querySelector(".like-btn");
-    const likeCount = post.querySelector(".like-count");
-    let likes = 0;
-    likeBtn.addEventListener("click", () => {
-      likes++;
-      likeCount.textContent = likes;
-    });
-
-    // Delete button
-    post.querySelector(".delete-btn").addEventListener("click", () => {
-      post.remove();
-    });
-
-    // Comments
-    const commentInput = post.querySelector(".comment-input");
-    const commentList = post.querySelector(".comment-list");
-    post.querySelector(".add-comment").addEventListener("click", () => {
-      const comment = commentInput.value.trim();
-      if (comment) {
-        const c = document.createElement("p");
-        c.className = "comment";
-        c.textContent = `${username}: ${comment}`;
-        commentList.appendChild(c);
-        commentInput.value = "";
-      }
-    });
-
-    document.getElementById("feed").prepend(post);
+    const message = document.getElementById("message").value.trim();
+    if (!message) return;
+    const posts = loadPosts();
+    posts.push({ author: username, message, comments: [], likes: 0 });
+    savePosts(posts);
     document.getElementById("message").value = "";
+    renderPosts();
   });
+
+  // On load
+  renderPosts();
 </script>
+
 
 </body>
 </html>
