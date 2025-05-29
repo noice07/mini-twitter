@@ -17,6 +17,12 @@
     <label for="circlecode">Circle Code</label>
     <input id="circlecode" type="text" placeholder="Enter circle code" required />
 
+    <label for="pfp">Profile Picture URL (optional)</label>
+    <input id="pfp" type="url" placeholder="https://..." />
+
+    <label for="status">Status (optional)</label>
+    <input id="status" type="text" placeholder="e.g., Chilling 😎" />
+
     <button type="submit">Login</button>
   </form>
 </main>
@@ -28,9 +34,16 @@
     e.preventDefault();
     const username = document.getElementById('username').value.trim();
     const code = document.getElementById('circlecode').value.trim();
+    const pfp = document.getElementById('pfp').value.trim();
+    const status = document.getElementById('status').value.trim();
 
     if (code === "friends123") {
       sessionStorage.setItem('username', username);
+
+      const profiles = JSON.parse(localStorage.getItem('profiles') || '{}');
+      profiles[username] = { pfp, status };
+      localStorage.setItem('profiles', JSON.stringify(profiles));
+
       window.location.href = 'feed.html';
     } else {
       alert("Invalid circle code.");
