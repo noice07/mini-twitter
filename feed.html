@@ -31,21 +31,29 @@
 
   document.getElementById("welcomeUser").textContent = `Hi, ${username} 👋`;
 
-  // Utility: Load/Save posts to localStorage
   const loadPosts = () => JSON.parse(localStorage.getItem("posts") || "[]");
   const savePosts = (posts) => localStorage.setItem("posts", JSON.stringify(posts));
 
+  const profiles = JSON.parse(localStorage.getItem("profiles") || "{}");
   const feed = document.getElementById("feed");
 
   function renderPosts() {
     feed.innerHTML = "";
     const posts = loadPosts();
     posts.reverse().forEach((post, index) => {
+      const authorProfile = profiles[post.author] || {};
+      const avatar = authorProfile.pfp || "https://via.placeholder.com/40";
+      const status = authorProfile.status || "";
+
       const postEl = document.createElement("div");
       postEl.className = "post";
       postEl.innerHTML = `
         <div class="post-header">
-          <strong>${post.author}</strong>
+          <img src="${avatar}" alt="${post.author}" class="avatar" />
+          <div class="user-info">
+            <strong>${post.author}</strong><br/>
+            <small>${status}</small>
+          </div>
           ${post.author === username ? '<button class="delete-btn">🗑️</button>' : ""}
         </div>
         <p>${post.message}</p>
@@ -62,34 +70,33 @@
         </div>
       `;
 
-      // Like logic
       const likeBtn = postEl.querySelector(".like-btn");
       const likeCount = postEl.querySelector(".like-count");
       likeBtn.addEventListener("click", () => {
-        posts[posts.length - 1 - index].likes = (posts[posts.length - 1 - index].likes || 0) + 1;
-        savePosts(posts);
+        const allPosts = loadPosts();
+        allPosts[allPosts.length - 1 - index].likes = (allPosts[allPosts.length - 1 - index].likes || 0) + 1;
+        savePosts(allPosts);
         renderPosts();
       });
 
-      // Delete logic
       if (post.author === username) {
         postEl.querySelector(".delete-btn").addEventListener("click", () => {
-          posts.splice(posts.length - 1 - index, 1);
-          savePosts(posts);
+          const allPosts = loadPosts();
+          allPosts.splice(allPosts.length - 1 - index, 1);
+          savePosts(allPosts);
           renderPosts();
         });
       }
 
-      // Comment logic
       const commentInput = postEl.querySelector(".comment-input");
-      const commentList = postEl.querySelector(".comment-list");
       postEl.querySelector(".add-comment").addEventListener("click", () => {
         const comment = commentInput.value.trim();
         if (comment) {
-          const newComment = { user: username, text: comment };
-          posts[posts.length - 1 - index].comments = posts[posts.length - 1 - index].comments || [];
-          posts[posts.length - 1 - index].comments.push(newComment);
-          savePosts(posts);
+          const allPosts = loadPosts();
+          const targetPost = allPosts[allPosts.length - 1 - index];
+          targetPost.comments = targetPost.comments || [];
+          targetPost.comments.push({ user: username, text: comment });
+          savePosts(allPosts);
           renderPosts();
         }
       });
@@ -102,6 +109,7 @@
     e.preventDefault();
     const message = document.getElementById("message").value.trim();
     if (!message) return;
+
     const posts = loadPosts();
     posts.push({ author: username, message, comments: [], likes: 0 });
     savePosts(posts);
@@ -109,10 +117,8 @@
     renderPosts();
   });
 
-  // On load
   renderPosts();
 </script>
-
 
 </body>
 </html>
