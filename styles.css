@@ -1,126 +1,84 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #121212;
-  color: #ffffff;
   margin: 0;
-  padding: 0;
+  font-family: system-ui, sans-serif;
+  background-color: #15202b;
+  color: #e1e8ed;
 }
 
 header, footer {
-  text-align: center;
+  background-color: #1a1a1a;
   padding: 1rem;
-  background-color: #1e1e1e;
-  font-size: 1.5rem;
+  text-align: center;
+  font-weight: bold;
 }
 
 .container {
-  width: 90%;
   max-width: 600px;
   margin: auto;
-  padding: 2rem 0;
-}
-
-form {
-  margin-bottom: 2rem;
+  padding: 1rem;
 }
 
 input, textarea, button {
   width: 100%;
   padding: 0.7rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
+  margin: 0.4rem 0;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 1rem;
 }
 
 input, textarea {
-  background-color: #2a2a2a;
-  color: white;
+  background: #253341;
+  color: #e1e8ed;
 }
 
 button {
-  background-color: #3a86ff;
+  background: #1da1f2;
   color: white;
-  cursor: pointer;
+  font-weight: bold;
 }
 
 button:hover {
-  background-color: #2563eb;
+  background: #1991da;
 }
 
 .feed .post {
-  background-color: #1f1f1f;
-  border-radius: 8px;
+  background: #192734;
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
+  border-radius: 10px;
 }
 
 .post-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.actions {
-  margin-top: 0.5rem;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.like-btn, .add-comment, .delete-btn {
-  background: none;
-  border: none;
-  color: #3a86ff;
-  cursor: pointer;
-}
-
-.comment-input {
-  margin-top: 1rem;
-  background-color: #2a2a2a;
-  color: white;
-  border-radius: 4px;
-  padding: 0.5rem;
-  width: 100%;
-}
-
-.comment-list {
-  margin-top: 0.5rem;
-}
-
-.comment {
-  background-color: #2a2a2a;
-  padding: 0.5rem;
-  border-radius: 4px;
-  margin-top: 0.3rem;
-}
 .avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 10px;
-  flex-shrink: 0;
 }
 
-.post-header {
+.user-meta {
+  flex-grow: 1;
+}
+
+.user-meta strong {
+  display: block;
+}
+
+.user-meta small {
+  color: #8899a6;
+}
+
+.actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
+  margin-top: 0.5rem;
 }
 
-.user-info {
-  flex-grow: 1;
-  text-align: left;
-}
-
-.user-info strong {
-  font-size: 1rem;
-  color: #ffffff;
-}
-
-.user-info small {
-  font-size: 0.8rem;
-  color: #aaaaaa;
-}
-
+.comments {
+  margin-top
